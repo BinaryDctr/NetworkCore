@@ -1,0 +1,7 @@
+name: NetworkCore
+version: 1.0-SNAPSHOT
+main: repo.binarydctr.nc.NetworkCore
+authors: [BinaryDctr]
+description: Handles all things a network needs.
+commands:
+
