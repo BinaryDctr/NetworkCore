@@ -57,6 +57,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>votifier</id>
+            <url>http://repo.howaner.de/</url>
+        </repository>
     </repositories>
 
     <dependencies>
