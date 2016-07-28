@@ -20,13 +20,14 @@ public class NetworkCore extends JavaPlugin {
      *
      */
 
+    public PlayerInformation playerInformation;
+
     @Override
     public void onEnable() {
-        new PlayerInformation("root", "NetworkCore", "", "3306", "localhost");
+        playerInformation = new PlayerInformation("root", "NetworkCore", "", "3306", "localhost", this);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable() {}
 
-    }
 }
