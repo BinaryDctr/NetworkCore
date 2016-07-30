@@ -27,8 +27,8 @@ import java.util.UUID;
 public class PlayerInformation extends Database implements Listener {
 
     public Connection connection;
-    public PlayerCall playerCall;
 
+    public PlayerCall playerCall;
     public NetworkCore networkCore;
 
     public PlayerInformation(String user, String database, String password, String port, String hostname, NetworkCore networkCore) {
