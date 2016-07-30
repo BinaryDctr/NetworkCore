@@ -1,7 +1,10 @@
 package repo.binarydctr.nc;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import repo.binarydctr.nc.player.PlayerInformation;
+import repo.binarydctr.nc.server.Servers;
+import repo.binarydctr.nc.util.HologramManager;
 
 /**
  * ******************************************************************
@@ -21,10 +24,27 @@ public class NetworkCore extends JavaPlugin {
      */
 
     public PlayerInformation playerInformation;
+    public HologramManager hologramManager;
+    public Servers servers;
 
     @Override
     public void onEnable() {
+        /*
+        Don't judge my config work I don't enjoy working with configs.
+         */
+        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+        saveConfig();
+
+        if(getConfig().get("Server.id") == null) {
+            getServer().getConsoleSender().sendMessage(ChatColor.RED + "Please fill out the config for this server, do not use same id as any other server.");
+            getServer().shutdown();
+            return;
+        }
+
         playerInformation = new PlayerInformation("root", "NetworkCore", "", "3306", "localhost", this);
+        hologramManager = new HologramManager(this);
+        servers = new Servers("root", "NetworkCore", "", "3306", "localhost", this);
     }
 
     @Override
