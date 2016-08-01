@@ -13,6 +13,8 @@ public enum Result {
 
     SUCCESS,
     FAILURE,
-    ERROR
+    ERROR,
+    TRUE,
+    FALSE
 
 }
