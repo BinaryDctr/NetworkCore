@@ -37,7 +37,7 @@ public class PlayerInformation extends Database implements Listener {
         connection = openConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `PlayerInfo`(`uuid` varchar(36) NOT NULL, `name` varchar(36) NOT NULL, `tokens` int(8) NOT NULL, `rank` varchar(36) NOT NULL)");
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

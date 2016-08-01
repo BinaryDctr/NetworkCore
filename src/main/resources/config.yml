@@ -1,10 +1,10 @@
 ################################################
-#                 Server Handler               #
+##                Server Handler              ##
 ################################################
-#   id: doesn't have to be a number it can be  #
-#              anything you want.              #
+##  id: doesn't have to be a number it can be ##
+##              anything you want.            ##
 ################################################
 
 Server:
-    id:
-    type:
+    id: null
+    type: null

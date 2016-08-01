@@ -35,12 +35,13 @@ public class Servers extends Database implements Listener {
         connection = openConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `Servers`(`id` varchar(36) NOT NULL, `type` varchar(36) NOT NULL, `players` int(8) NOT NULL)");
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         serverCall = new ServerCall(this);
+        serverCall.addServer(getServerID(), getServerType());
 
         networkCore.getServer().getPluginManager().registerEvents(this, networkCore);
     }

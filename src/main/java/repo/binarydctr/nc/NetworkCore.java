@@ -36,7 +36,7 @@ public class NetworkCore extends JavaPlugin {
         saveDefaultConfig();
         saveConfig();
 
-        if(getConfig().get("Server.id") == null) {
+        if(getConfig().get("Server.id") == null || getConfig().getString("Server.id").equalsIgnoreCase("null")) {
             getServer().getConsoleSender().sendMessage(ChatColor.RED + "Please fill out the config for this server, do not use same id as any other server.");
             getServer().shutdown();
             return;

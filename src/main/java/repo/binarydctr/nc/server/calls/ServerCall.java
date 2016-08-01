@@ -60,7 +60,7 @@ public class ServerCall extends DatabaseCall<Servers> {
         plugin.checkConnection();
         if(checkExists(id) == Result.FALSE) {
             try {
-                PreparedStatement ps = plugin.connection.prepareStatement("INSERET INTO `Servers` VALUES (?,?,?)");
+                PreparedStatement ps = plugin.connection.prepareStatement("INSERT INTO `Servers` VALUES (?,?,?)");
                 ps.setString(1, id);
                 ps.setString(2, type.toString());
                 ps.setInt(3, 0);
@@ -114,7 +114,7 @@ public class ServerCall extends DatabaseCall<Servers> {
         plugin.checkConnection();
         if(checkExists(id) == Result.TRUE) {
             try{
-                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `Servers` SET player=? WHERE id=?");
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `Servers` SET players=? WHERE id=?");
                 ps.setInt(1, getPlayers(id) + 1);
                 ps.setString(2, id);
                 ps.executeUpdate();
@@ -140,7 +140,7 @@ public class ServerCall extends DatabaseCall<Servers> {
         plugin.checkConnection();
         if(checkExists(id) == Result.TRUE) {
             try{
-                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `Servers` SET player=? WHERE id=?");
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `Servers` SET players=? WHERE id=?");
                 ps.setInt(1, getPlayers(id) - 1);
                 ps.setString(2, id);
                 ps.executeUpdate();
