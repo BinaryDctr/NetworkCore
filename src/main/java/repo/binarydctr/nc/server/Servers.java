@@ -1,5 +1,9 @@
 package repo.binarydctr.nc.server;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import repo.binarydctr.nc.NetworkCore;
 import repo.binarydctr.nc.database.Database;
 import repo.binarydctr.nc.server.calls.ServerCall;
@@ -18,7 +22,7 @@ import java.sql.SQLException;
  * agreements with you, the third party.
  * ******************************************************************
  **/
-public class Servers extends Database {
+public class Servers extends Database implements Listener {
 
     public Connection connection;
 
@@ -37,6 +41,8 @@ public class Servers extends Database {
         }
 
         serverCall = new ServerCall(this);
+
+        networkCore.getServer().getPluginManager().registerEvents(this, networkCore);
     }
 
     public ServerType getServerType() {
@@ -49,7 +55,24 @@ public class Servers extends Database {
         return null;
     }
 
-    public int getServerID() {
-        return networkCore.getConfig().getInt("Server.id");
+    public String getServerID() {
+        return networkCore.getConfig().getString("Server.id");
     }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        /*
+        UPDATES DATABASE ON PLAYER COUNT
+         */
+        serverCall.addPlayers(getServerID());
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        /*
+        UPDATES DATABASE ON PLAYER COUNT
+         */
+        serverCall.removePlayers(getServerID());
+    }
+
 }
