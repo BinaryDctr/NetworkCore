@@ -6,7 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import repo.binarydctr.nc.NetworkCore;
+import repo.binarydctr.nc.database.Database;
+import repo.binarydctr.nc.vote.calls.VoteCall;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.UUID;
 
 /**
@@ -18,26 +23,34 @@ import java.util.UUID;
  * agreements with you, the third party.
  * ******************************************************************
  **/
-public class Votifier implements Listener {
+public class Votifier extends Database implements Listener {
 
+    public Connection connection;
+
+    public VoteCall voteCall;
     public NetworkCore networkCore;
 
-    public Votifier(NetworkCore networkCore) {
+    public Votifier(String user, String database, String password, String port, String hostname, NetworkCore networkCore) {
+        super(user, database, password, port, hostname);
         this.networkCore = networkCore;
+        connection = openConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `Votifier`(`uuid` varchar(36) NOT NULL, `name` varchar(36) NOT NULL, `votes` int(8) NOT NULL)");
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        voteCall = new VoteCall(this);
     }
 
     @EventHandler
     public void onVote(VotifierEvent event) {
         String name = event.getVote().getUsername();
-        try {
-            String id = networkCore.playerInformation.playerCall.getUUID(name);
-            UUID uuid = UUID.fromString(id);
-            Player player = Bukkit.getPlayer(uuid);
-            if(networkCore.playerInformation.playerCall.checkExists(uuid) == true) {
-                networkCore.playerInformation.playerCall.addTokens(50, player);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String id = networkCore.playerInformation.playerCall.getUUID(name);
+        UUID uuid = UUID.fromString(id);
+        Player player = Bukkit.getPlayer(uuid);
+        networkCore.playerInformation.playerCall.addTokens(50, player);
+        voteCall.setVotes(uuid, voteCall.getVotes(uuid) + 1);
     }
 }

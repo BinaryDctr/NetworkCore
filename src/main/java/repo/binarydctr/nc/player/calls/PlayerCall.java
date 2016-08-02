@@ -41,9 +41,9 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
     public boolean checkExists(UUID uuid) {
         plugin.checkConnection();
         try {
-            PreparedStatement preparedStatement = plugin.connection.prepareStatement("SELECT uuid FROM PlayerInfo WHERE uuid=?");
-            preparedStatement.setString(1, uuid.toString());
-            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement ps = plugin.connection.prepareStatement("SELECT uuid FROM PlayerInfo WHERE uuid=?");
+            ps.setString(1, uuid.toString());
+            ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 return true;
             } else {
@@ -68,9 +68,9 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         plugin.checkConnection();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("SELECT name FROM PlayerInfo WHERE uuid=?");
-                preparedStatement.setString(1, uuid.toString());
-                ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement ps = plugin.connection.prepareStatement("SELECT name FROM PlayerInfo WHERE uuid=?");
+                ps.setString(1, uuid.toString());
+                ResultSet resultSet = ps.executeQuery();
                 if (resultSet.next()) {
                     return resultSet.getString("name");
                 } else {
@@ -95,11 +95,11 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
     public String getUUID(String name) {
         plugin.checkConnection();
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("SELECT uuid FROM PlayerInfo WHERE name=?");
-                preparedStatement.setString(1, name);
-                ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement ps = plugin.connection.prepareStatement("SELECT uuid FROM PlayerInfo WHERE name=?");
+                ps.setString(1, name);
+                ResultSet resultSet = ps.executeQuery();
                 if (resultSet.next()) {
-                    return resultSet.getString("name");
+                    return resultSet.getString("uuid");
                 } else {
                     return null;
                 }
@@ -122,9 +122,9 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         plugin.checkConnection();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("SELECT rank FROM PlayerInfo WHERE uuid=?");
-                preparedStatement.setString(1, uuid.toString());
-                ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement ps = plugin.connection.prepareStatement("SELECT rank FROM PlayerInfo WHERE uuid=?");
+                ps.setString(1, uuid.toString());
+                ResultSet resultSet = ps.executeQuery();
                 if (resultSet.next()) {
                     return plugin.getRankFromString(resultSet.getString("rank"));
                 } else {
@@ -153,10 +153,10 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         UUID uuid = player.getUniqueId();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET rank=? WHERE uuid=?");
-                preparedStatement.setString(1, rank.getName());
-                preparedStatement.setString(2, uuid.toString());
-                preparedStatement.executeUpdate();
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET rank=? WHERE uuid=?");
+                ps.setString(1, rank.getName());
+                ps.setString(2, uuid.toString());
+                ps.executeUpdate();
                 Bukkit.getPluginManager().callEvent(new RankChangeEvent(player, rank));
                 return Result.SUCCESS;
             } catch (SQLException e) {
@@ -180,9 +180,9 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         plugin.checkConnection();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("SELECT tokens FROM PlayerInfo WHERE uuid=?");
-                preparedStatement.setString(1, uuid.toString());
-                ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement ps = plugin.connection.prepareStatement("SELECT tokens FROM PlayerInfo WHERE uuid=?");
+                ps.setString(1, uuid.toString());
+                ResultSet resultSet = ps.executeQuery();
                 if (resultSet.next()) {
                     return resultSet.getInt("uuid");
                 } else {
@@ -211,10 +211,10 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         UUID uuid = player.getUniqueId();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
-                preparedStatement.setInt(1, getTokens(uuid) + amount);
-                preparedStatement.setString(2, uuid.toString());
-                preparedStatement.executeUpdate();
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
+                ps.setInt(1, getTokens(uuid) + amount);
+                ps.setString(2, uuid.toString());
+                ps.executeUpdate();
                 Bukkit.getPluginManager().callEvent(new TokenChangeEvent(player, getTokens(uuid) + amount));
                 return Result.SUCCESS;
             } catch (SQLException e) {
@@ -240,10 +240,10 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         UUID uuid = player.getUniqueId();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
-                preparedStatement.setInt(1, getTokens(uuid) - amount);
-                preparedStatement.setString(2, uuid.toString());
-                preparedStatement.executeUpdate();
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
+                ps.setInt(1, getTokens(uuid) - amount);
+                ps.setString(2, uuid.toString());
+                ps.executeUpdate();
                 Bukkit.getPluginManager().callEvent(new TokenChangeEvent(player, getTokens(uuid) - amount));
                 return Result.SUCCESS;
             } catch (SQLException e) {
@@ -269,10 +269,10 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         UUID uuid = player.getUniqueId();
         if(checkExists(uuid) == true) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
-                preparedStatement.setInt(1, amount);
-                preparedStatement.setString(2, uuid.toString());
-                preparedStatement.executeUpdate();
+                PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET tokens=? WHERE uuid=?");
+                ps.setInt(1, amount);
+                ps.setString(2, uuid.toString());
+                ps.executeUpdate();
                 Bukkit.getPluginManager().callEvent(new TokenChangeEvent(player, amount));
                 return Result.SUCCESS;
             } catch (SQLException e) {
@@ -295,12 +295,12 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         plugin.checkConnection();
         if(checkExists(player.getUniqueId()) == false) {
             try {
-                PreparedStatement preparedStatement = plugin.connection.prepareStatement("INSERT INTO `PlayerInfo` VALUES(?,?,?,?)");
-                preparedStatement.setString(1, player.getUniqueId().toString());
-                preparedStatement.setString(2, player.getName());
-                preparedStatement.setInt(3, 0);
-                preparedStatement.setString(4, Rank.DEFAULT.getName());
-                preparedStatement.executeUpdate();
+                PreparedStatement ps = plugin.connection.prepareStatement("INSERT INTO `PlayerInfo` VALUES(?,?,?,?)");
+                ps.setString(1, player.getUniqueId().toString());
+                ps.setString(2, player.getName());
+                ps.setInt(3, 0);
+                ps.setString(4, Rank.DEFAULT.getName());
+                ps.executeUpdate();
                 return Result.SUCCESS;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -324,10 +324,10 @@ public class PlayerCall extends DatabaseCall<PlayerInformation> {
         if(checkExists(player.getUniqueId()) == true) {
             if (!getName(player.getUniqueId()).equalsIgnoreCase(player.getName())) {
                 try {
-                    PreparedStatement preparedStatement = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET name=? WHERE uuid=?");
-                    preparedStatement.setString(1, player.getName());
-                    preparedStatement.setString(2, player.getUniqueId().toString());
-                    preparedStatement.executeUpdate();
+                    PreparedStatement ps = plugin.connection.prepareStatement("UPDATE `PlayerInfo` SET name=? WHERE uuid=?");
+                    ps.setString(1, player.getName());
+                    ps.setString(2, player.getUniqueId().toString());
+                    ps.executeUpdate();
                     return Result.SUCCESS;
                 } catch (SQLException e) {
                     e.printStackTrace();

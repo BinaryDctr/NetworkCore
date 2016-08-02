@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import repo.binarydctr.nc.player.PlayerInformation;
 import repo.binarydctr.nc.server.Servers;
 import repo.binarydctr.nc.util.HologramManager;
+import repo.binarydctr.nc.vote.Votifier;
 
 /**
  * ******************************************************************
@@ -24,8 +25,9 @@ public class NetworkCore extends JavaPlugin {
      */
 
     public PlayerInformation playerInformation;
-    public HologramManager hologramManager;
     public Servers servers;
+    public Votifier votifier;
+    public HologramManager hologramManager;
 
     @Override
     public void onEnable() {
@@ -43,8 +45,9 @@ public class NetworkCore extends JavaPlugin {
         }
 
         playerInformation = new PlayerInformation("root", "NetworkCore", "", "3306", "localhost", this);
-        hologramManager = new HologramManager(this);
         servers = new Servers("root", "NetworkCore", "", "3306", "localhost", this);
+        votifier = new Votifier("root", "NetworkCore", "", "3306", "localhost", this);
+        hologramManager = new HologramManager(this);
     }
 
     @Override
